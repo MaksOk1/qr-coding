@@ -73,6 +73,7 @@ def make_changes(matrix: list, size: int):
     # set_finder(matrix=matrix, pos=(0, 0))
     # set_finder(matrix=matrix, pos=(size - 7, 0))
     set_finders(matrix=matrix, size=size)
+    set_timings(matrix=matrix, size=size)
     return matrix
 
 
@@ -111,6 +112,9 @@ def set_finder(matrix: list, pos: tuple):
     
     return matrix
 
+# def set_alignment_finder(matrix: list, size: int):
+
+
 def set_finders(matrix: list, size: int):
     x_top_left = 0
     y_top_left = 0
@@ -124,6 +128,22 @@ def set_finders(matrix: list, size: int):
     finders = (pos_top_left, pos_top_right, pos_bottom_left)
     for finder_pos in finders:
         set_finder(matrix=matrix, pos=finder_pos)
+    # if size >=25:
+    #     set_alignment_finder()
+
+def set_timings(matrix: list, size: int):
+    y_horizontal = 5 # actually 6
+    x_vertical = 5 # actually 6
+    zero_or_one = 0
+    # pos_horizontal = (x_horizontal, y_horizontal) # maybe not the best idea
+    for change_line in range(size):
+        if matrix[y_horizontal][change_line] is None:
+            print(f"Changed horizontal timing - matrix[{y_horizontal}][{change_line}]")
+            matrix[y_horizontal][change_line] = (change_line % 2 == zero_or_one)
+        if matrix[change_line][x_vertical] is None:
+            print(f"Changed vertical timing - matrix[{y_horizontal}][{change_line}]")
+            matrix[change_line][x_vertical] = (change_line % 2 == zero_or_one)
+    return matrix
 
     
 
@@ -177,7 +197,7 @@ def set_finders(matrix: list, size: int):
 
 if __name__ == "__main__":
     # setup
-    version = 1
+    version = 10
     size = create_size_by_version(version=version)
     matrix = create_matrix_by_size(size=size)
 
