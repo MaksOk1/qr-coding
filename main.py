@@ -1,3 +1,5 @@
+import sys
+sys.dont_write_bytecode = True
 # size = 21
 # matrix = (
 #     [[None for _ in range(size)] for _ in range(size)]
@@ -66,17 +68,56 @@ def set_centre_cube(matrix: list, centre_cube):
     return matrix
 
 def set_skyland_cubes(matrix: list, size: int):
+    shift = int(size - 8)
+
+    # Boxes
     for i in range(7):
+        # top-left
         matrix[i][0] = True
         matrix[i][6] = True
         matrix[0][i] = True
         matrix[6][i] = True
+        
+        # top-right
+        matrix[i][shift] = True
+        matrix[i][shift + 6] = True
+        matrix[0][i + shift] = True
+        matrix[6][i + shift] = True
+
+        # bottom-left
+        matrix[shift + i][0] = True
+        matrix[shift + i][6] = True
+        matrix[shift][i] = True
+        matrix[shift + 6][i] = True
+    
+    _inside_shift = 2
+    shift = int(size - 6)
+    # 3x3 inside
+    for i in range(3):
+        ii = i + _inside_shift
+
+        # top-left
+        matrix[ii][_inside_shift] = True
+        matrix[ii][_inside_shift + 1] = True
+        matrix[ii][_inside_shift + 2] = True
+
+        # top-right
+        matrix[ii][shift] = True
+        matrix[ii][shift + 1] = True
+        matrix[ii][shift + 2] = True
+
+        # bottom-left
+        matrix[shift + i][_inside_shift] = True
+        matrix[shift + i][_inside_shift + 1] = True
+        matrix[shift + i][_inside_shift + 2] = True
+        
+
     print(f"Created Cube in top-left corner")
     return matrix
 
 if __name__ == "__main__":
     # setup
-    version = 2
+    version = 1
     size = create_size_by_version(version=version)
     matrix = create_matrix_by_size(size=size)
 
