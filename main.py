@@ -53,12 +53,26 @@ def set_margins(matrix: list, margin_size: int):
 
 def print_matrix(matrix):
     # _matrix[10][10] = True
+    # for row in matrix:
+    #     print("".join(("  " if cell != None else "██") for cell in row))
     for row in matrix:
-        print("".join(("  " if cell != None else "██") for cell in row))
+        str = ""
+        for cell in row:
+            if cell != None and cell != False and cell != 0:
+                itr = "  "
+            else:
+                itr = "██"
+        # itr = ("  ")
+            str += itr
+        print(str)
     print("Matrix displayed")
+    # print(f"Current matrix:\n{matrix}")
 
 def make_changes(matrix: list, size: int):
-    set_skyland_cubes(matrix=matrix, size=size)
+    # set_skyland_cubes(matrix=matrix, size=size)
+    # set_finder(matrix=matrix, pos=(0, 0))
+    # set_finder(matrix=matrix, pos=(size - 7, 0))
+    set_finders(matrix=matrix, size=size)
     return matrix
 
 
@@ -67,53 +81,99 @@ def set_centre_cube(matrix: list, centre_cube):
     print(f"Made change to matrix[{centre_cube}][{centre_cube}]")
     return matrix
 
-def set_skyland_cubes(matrix: list, size: int):
-    shift = int(size - 8)
+def set_finder(matrix: list, pos: tuple):
+    start_x, start_y = pos
 
-    # Boxes
-    for i in range(7):
-        # top-left
-        matrix[i][0] = True
-        matrix[i][6] = True
-        matrix[0][i] = True
-        matrix[6][i] = True
-        
-        # top-right
-        matrix[i][shift] = True
-        matrix[i][shift + 6] = True
-        matrix[0][i + shift] = True
-        matrix[6][i + shift] = True
-
-        # bottom-left
-        matrix[shift + i][0] = True
-        matrix[shift + i][6] = True
-        matrix[shift][i] = True
-        matrix[shift + 6][i] = True
+    pattern = [
+        [1,1,1,1,1,1,1],
+        [1,0,0,0,0,0,1],
+        [1,0,1,1,1,0,1],
+        [1,0,1,1,1,0,1],
+        [1,0,1,1,1,0,1],
+        [1,0,0,0,0,0,1],
+        [1,1,1,1,1,1,1],
+    ]
     
-    _inside_shift = 2
-    shift = int(size - 6)
-    # 3x3 inside
-    for i in range(3):
-        ii = i + _inside_shift
+    pattern_size = len(pattern) # pattern width and height are optional
+    canvas_size = len(matrix)   # and here too
 
-        # top-left
-        matrix[ii][_inside_shift] = True
-        matrix[ii][_inside_shift + 1] = True
-        matrix[ii][_inside_shift + 2] = True
 
-        # top-right
-        matrix[ii][shift] = True
-        matrix[ii][shift + 1] = True
-        matrix[ii][shift + 2] = True
 
-        # bottom-left
-        matrix[shift + i][_inside_shift] = True
-        matrix[shift + i][_inside_shift + 1] = True
-        matrix[shift + i][_inside_shift + 2] = True
+    for y in range(pattern_size):
+        for x in range(pattern_size):
+            canvas_x = start_x + x
+            canvas_y = start_y + y
+
+            if 0 <= canvas_x < canvas_size and 0 <= canvas_y < canvas_size:
+                matrix[canvas_y][canvas_x] = bool(pattern[y][x])
+            else:
+                pass
+    
+    return matrix
+
+def set_finders(matrix: list, size: int):
+    x_top_left = 0
+    y_top_left = 0
+    x_top_right = size - 7
+    y_top_right = 0
+    x_bottom_left = 0
+    y_bottom_left = size - 7
+    pos_top_left = (x_top_left, y_top_left)
+    pos_top_right = (x_top_right, y_top_right)
+    pos_bottom_left = (x_bottom_left, y_bottom_left)
+    finders = (pos_top_left, pos_top_right, pos_bottom_left)
+    for finder_pos in finders:
+        set_finder(matrix=matrix, pos=finder_pos)
+
+    
+
+# def set_skyland_cubes(matrix: list, size: int): # Better change to other logic - starting point, from which cube creates (like incert)
+#     shift = int(size - 8)
+
+#     # Boxes
+#     for i in range(7):
+#         # top-left
+#         matrix[i][0] = True
+#         matrix[i][6] = True
+#         matrix[0][i] = True
+#         matrix[6][i] = True
+        
+#         # top-right
+#         matrix[i][shift] = True
+#         matrix[i][shift + 6] = True
+#         matrix[0][i + shift] = True
+#         matrix[6][i + shift] = True
+
+#         # bottom-left
+#         matrix[shift + i][0] = True
+#         matrix[shift + i][6] = True
+#         matrix[shift][i] = True
+#         matrix[shift + 6][i] = True
+    
+#     _inside_shift = 2
+#     shift = int(size - 6)
+#     # 3x3 inside
+#     for i in range(3):
+#         ii = i + _inside_shift
+
+#         # top-left
+#         matrix[ii][_inside_shift] = True
+#         matrix[ii][_inside_shift + 1] = True
+#         matrix[ii][_inside_shift + 2] = True
+
+#         # top-right
+#         matrix[ii][shift] = True
+#         matrix[ii][shift + 1] = True
+#         matrix[ii][shift + 2] = True
+
+#         # bottom-left
+#         matrix[shift + i][_inside_shift] = True
+#         matrix[shift + i][_inside_shift + 1] = True
+#         matrix[shift + i][_inside_shift + 2] = True
         
 
-    print(f"Created Cube in top-left corner")
-    return matrix
+#     print(f"Created Cube in top-left corner")
+#     return matrix
 
 if __name__ == "__main__":
     # setup
